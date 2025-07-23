@@ -1,8 +1,4 @@
-/* globals.css ou styles/globals.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import "tailwindcss";
 a {
   text-decoration: none;
 }
