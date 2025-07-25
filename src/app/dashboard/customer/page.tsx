@@ -3,14 +3,18 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export default async function Dashboard() {
+export default async function Customer() {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     redirect("/");
   }
   return (
     <Container>
-      <h1>dashboard</h1>
+      <main>
+        <div>
+          <h1>Meus clienter</h1>
+        </div>
+      </main>
     </Container>
   );
 }
