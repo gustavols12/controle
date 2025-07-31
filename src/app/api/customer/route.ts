@@ -1,0 +1,35 @@
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+
+export function GET(request: Request) {
+  return new Response("Hello, Customer!");
+}
+export async function POST(request: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { name, email, phone, address, userId } = await request.json();
+
+  try {
+    await prisma.customer.create({
+      data: {
+        name,
+        email,
+        phone,
+        address,
+        userId,
+      },
+    });
+    return NextResponse.json({ message: "Customer created successfully" });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to create customer" },
+      { status: 500 }
+    );
+  }
+}

@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/input";
+import { useRouter } from "next/navigation";
 
-export function NewCustomerForm() {
+export function NewCustomerForm({ userId }: { userId: string }) {
   const schema = z.object({
     name: z.string().min(1, "o nome é obrigatório"),
     email: z.email("Digite um email válido").min(1, "o email é obrigatório"),
@@ -29,7 +30,21 @@ export function NewCustomerForm() {
     resolver: zodResolver(schema),
   });
 
-  function handleRegisterCustomer(data: FormData) {}
+  const router = useRouter();
+
+  async function handleRegisterCustomer(data: FormData) {
+    await fetch("/api/customer", {
+      method: "POST",
+      body: JSON.stringify({
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        userId,
+      }),
+    });
+    router.replace("/dashboard/customer");
+  }
 
   return (
     <form
