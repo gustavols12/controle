@@ -30,3 +30,22 @@ export async function POST(request: Request) {
     );
   }
 }
+
+// export async function DELETE(request: Request) {
+//   const { searchParams } = new URL(request.url);
+//   const userId = searchParams.get("id");
+
+//   try {
+//     await prisma.customer.delete({
+//       where: {
+//         id: userId as string,
+//       },
+//     });
+//     return NextResponse.json({ message: "Customer deleted successfully" });
+//   } catch (error) {
+//     return NextResponse.json(
+//       { error: "Failed to Delete customer" },
+//       { status: 500 }
+//     );
+//   }
+// }

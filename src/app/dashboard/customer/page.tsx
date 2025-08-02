@@ -12,7 +12,7 @@ export default async function Customer() {
     redirect("/");
   }
 
-  const customers = prisma.customer.findMany({
+  const customers = await prisma.customer.findMany({
     where: { userId: session.user.id },
   });
   return (
@@ -29,10 +29,15 @@ export default async function Customer() {
         </div>
 
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-3">
-          {(await customers).map((customer) => (
+          {customers.map((customer) => (
             <Cardcustomer key={customer.id} customer={customer} />
           ))}
         </section>
+        {customers.length === 0 && (
+          <h1 className=" font-bold text-gray-600">
+            Nenhum cliente cadastrado
+          </h1>
+        )}
       </main>
     </Container>
   );
