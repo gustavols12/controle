@@ -4,12 +4,22 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { TicketItem } from "./components/ticket";
+import prisma from "@/lib/prisma";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     redirect("/");
   }
+  const tickets = await prisma.ticket.findMany({
+    where: {
+      userId: session.user.id,
+      status: "ABERTO",
+    },
+    include: {
+      customer: true,
+    },
+  });
   return (
     <Container>
       <main className="mt-9 mb-2">
@@ -30,10 +40,20 @@ export default async function Dashboard() {
             <th className="font-medium text-left">AÇÕES</th>
           </thead>
           <tbody>
-            <TicketItem />
-            <TicketItem />
+            {tickets.map((ticket) => (
+              <TicketItem
+                key={ticket.id}
+                ticket={ticket}
+                customer={ticket.customer}
+              />
+            ))}
           </tbody>
         </table>
+        {tickets.length === 0 && (
+          <h1 className=" px-2 md:px-0text-gray-600">
+            Nenhum ticket em aberto encontrado...
+          </h1>
+        )}
       </main>
     </Container>
   );
