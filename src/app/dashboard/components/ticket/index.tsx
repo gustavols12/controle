@@ -1,7 +1,9 @@
 "use client";
+import { ModalContext } from "@/providers/modal";
 import { CustomerProps } from "@/utils/customer.type";
 import { TicketProps } from "@/utils/ticket.type";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
 import { FiCheckSquare, FiFile, FiTrash } from "react-icons/fi";
 
 interface TicketItemProps {
@@ -9,6 +11,7 @@ interface TicketItemProps {
   customer: CustomerProps | null;
 }
 export function TicketItem({ ticket, customer }: TicketItemProps) {
+  const { handleModalVisible, setDetailTicket } = useContext(ModalContext);
   const router = useRouter();
   async function handleChangeStatus() {
     try {
@@ -21,6 +24,13 @@ export function TicketItem({ ticket, customer }: TicketItemProps) {
     } catch (error) {
       alert("deu erro");
     }
+  }
+  function handleModalTicket() {
+    handleModalVisible();
+    setDetailTicket({
+      customer: customer,
+      ticket: ticket,
+    });
   }
   return (
     <>
@@ -38,7 +48,7 @@ export function TicketItem({ ticket, customer }: TicketItemProps) {
           <button className="mr-1" onClick={handleChangeStatus}>
             <FiCheckSquare size={24} color="green" />
           </button>
-          <button>
+          <button onClick={handleModalTicket}>
             <FiFile size={24} color="#3b82f6" />
           </button>
         </td>

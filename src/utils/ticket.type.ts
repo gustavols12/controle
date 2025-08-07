@@ -5,5 +5,6 @@ export interface TicketProps {
   createdAt: Date | null;
   updatedAt: Date | null;
   customerId: string | null;
+  description: string;
   userId: string | null;
 }
