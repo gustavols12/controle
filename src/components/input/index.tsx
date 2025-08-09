@@ -23,7 +23,7 @@ export function Input({
       <input
         type={type}
         id={name}
-        className="w-full border-2 rounded-md h-11 px-2"
+        className="w-full  rounded-md h-11 px-2 outline-none border-1 border-slate-200 bg-white"
         placeholder={placeholder}
         {...register(name, rules)}
       />
