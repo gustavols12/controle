@@ -3,6 +3,26 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const customerEmail = searchParams.get("email");
+
+  if (!customerEmail || customerEmail === "") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const customer = await prisma.customer.findFirst({
+      where: {
+        email: customerEmail,
+      },
+    });
+    return NextResponse.json(customer);
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+}
+
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
 
