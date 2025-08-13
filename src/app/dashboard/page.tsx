@@ -5,6 +5,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { TicketItem } from "./components/ticket";
 import prisma from "@/lib/prisma";
+import { ButtonRefrash } from "./components/button";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -13,8 +14,10 @@ export default async function Dashboard() {
   }
   const tickets = await prisma.ticket.findMany({
     where: {
-      userId: session.user.id,
       status: "ABERTO",
+      customer: {
+        userId: session.user.id,
+      },
     },
     include: {
       customer: true,
@@ -28,19 +31,24 @@ export default async function Dashboard() {
       <main className="mt-9 mb-2">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Chamados</h1>
-          <Link
-            className="bg-blue-500 px-4 py-1 rounded text-white"
-            href="/dashboard/new"
-          >
-            Abrir Chamado
-          </Link>
+          <div className="flex items-center justify-center gap-2">
+            <Link
+              className="bg-blue-500 px-4 py-1 rounded text-white"
+              href="/dashboard/new"
+            >
+              Abrir Chamado
+            </Link>
+            <ButtonRefrash />
+          </div>
         </div>
         <table className="min-w-full my-2">
           <thead>
-            <th className="font-medium text-left pl-2">CLIENTE</th>
-            <th className="font-medium text-left">CADASTRO</th>
-            <th className="font-medium text-left">STATUS</th>
-            <th className="font-medium text-left">AÇÕES</th>
+            <tr>
+              <th className="font-medium text-left pl-2">CLIENTE</th>
+              <th className="font-medium text-left">CADASTRO</th>
+              <th className="font-medium text-left">STATUS</th>
+              <th className="font-medium text-left">AÇÕES</th>
+            </tr>
           </thead>
           <tbody>
             {tickets.map((ticket) => (

@@ -3,8 +3,14 @@ import { Input } from "@/components/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { CustomerDataInfo } from "../../page";
+import { useRouter } from "next/navigation";
 
-export function FormTicket() {
+interface TicketFormProps {
+  customer: CustomerDataInfo;
+}
+
+export function FormTicket({ customer }: TicketFormProps) {
   const schema = z.object({
     name: z.string().min(1, "O nome do chamado é obrigatório"),
     description: z.string().min(1, "Descreva um pouco obre o problema"),
@@ -19,8 +25,26 @@ export function FormTicket() {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+
+  async function handleRegisterTicket(data: FormData) {
+    const response = await fetch("/api/ticket", {
+      method: "POST",
+      body: JSON.stringify({
+        name: data.name,
+        description: data.description,
+        customerId: customer.id,
+      }),
+    });
+    if (response.ok) {
+      setValue("name", "");
+      setValue("description", "");
+    }
+  }
   return (
-    <form className="bg-slate-100 mt-6 px-4 py-6 rounded ">
+    <form
+      className="bg-slate-100 mt-6 px-4 py-6 rounded "
+      onSubmit={handleSubmit(handleRegisterTicket)}
+    >
       <label className="font-medium text-lg mb-1">Nome do chamado</label>
       <Input
         name="name"

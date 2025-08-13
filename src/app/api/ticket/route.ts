@@ -44,3 +44,31 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }
 }
+
+export async function POST(request: Request) {
+  const { customerId, name, description } = await request.json();
+
+  if (!customerId || !name || !description) {
+    return NextResponse.json(
+      { error: "failed create new ticket" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    await prisma.ticket.create({
+      data: {
+        name,
+        description,
+        status: "ABERTO",
+        customerId,
+      },
+    });
+    return NextResponse.json({ message: "chamado cadastrado" });
+  } catch {
+    return NextResponse.json(
+      { error: "failed create new ticket" },
+      { status: 400 }
+    );
+  }
+}
