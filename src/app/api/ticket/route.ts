@@ -4,11 +4,6 @@ import { error } from "console";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-export function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {}
-
 export async function PATCH(request: NextRequest) {
   const session = await getServerSession(authOptions);
 
