@@ -6,7 +6,7 @@ export function Cardcustomer({ customer }: { customer: CustomerProps }) {
   const router = useRouter();
   async function handleDeleteCustomer() {
     try {
-      const res = await fetch(`/api/customer/${customer.id}`, {
+      const res = await fetch(`/api/customer?id=${customer.id}`, {
         method: "DELETE",
       });
       if (res.ok) {
