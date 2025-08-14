@@ -5,9 +5,9 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const id = params.id;
+  const { id } = context.params;
   const session = await getServerSession(authOptions);
 
   const findTickets = await prisma.ticket.findFirst({
