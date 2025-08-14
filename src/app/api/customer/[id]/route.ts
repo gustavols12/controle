@@ -3,14 +3,10 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-// Tipo do contexto para rotas dinâmicas
-type RouteContext = {
-  params: {
-    id: string;
-  };
-};
-
-export async function DELETE(request: Request, context: RouteContext) {
+export async function DELETE(
+  request: Request,
+  context: { params: { id: string } }
+) {
   const { id } = context.params;
   const session = await getServerSession(authOptions);
 
